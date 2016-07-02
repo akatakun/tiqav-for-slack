@@ -1,3 +1,15 @@
+shuffle = (arr) ->
+  arr = arr.slice()
+  i = arr.length
+  if i == 0
+    return arr
+  while --i
+    j = Math.floor(Math.random() * (i + 1))
+    tmp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = tmp
+  arr
+
 module.exports = (robot) ->
   # Avoid caches of Slack
   timestamp = (new Date()).toISOString().replace(/[^0-9]/g, '')
@@ -7,6 +19,7 @@ module.exports = (robot) ->
     request (err, res, body) ->
       json = JSON.parse body
       if json.length > 0
+        json = shuffle json
         msg.send "http://img.tiqav.com/#{json[0].id}.#{json[0].ext}?#{timestamp}"
 
   robot.hear /(.*?) gets/i, (msg) ->
@@ -15,5 +28,5 @@ module.exports = (robot) ->
     request (err, res, body) ->
       json = JSON.parse body
       if json.length > 0
-        msg.send "#{keyword}: #{json[0].id}.#{json[0].ext}"
+        json = shuffle json
         msg.send "http://img.tiqav.com/#{json[0].id}.#{json[0].ext}?#{timestamp}"
