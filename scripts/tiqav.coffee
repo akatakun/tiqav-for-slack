@@ -10,6 +10,13 @@ shuffle = (arr) ->
     arr[j] = tmp
   arr
 
+translate_ng_words = (msg) ->
+  ng_words = [
+    'ざける',
+    'ザケル',
+  ]
+  if ng_words.indexOf(msg) < 0 then msg else 'よつばと'
+
 module.exports = (robot) ->
   # Avoid caches of Slack
   timestamp = (new Date()).toISOString().replace(/[^0-9]/g, '')
@@ -23,7 +30,7 @@ module.exports = (robot) ->
         msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{timestamp}"
 
   robot.hear /(.*?) gets/i, (msg) ->
-    keyword = msg.match[1]
+    keyword = translate_ng_words msg.match[1]
     request = msg.http('http://api.tiqav.com/search.json').query(q: keyword).get()
     request (err, res, body) ->
       json = JSON.parse body
