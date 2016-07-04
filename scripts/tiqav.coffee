@@ -20,7 +20,7 @@ module.exports = (robot) ->
       json = JSON.parse body
       if json.length > 0
         json = shuffle json
-        msg.send "http://img.tiqav.com/#{json[0].id}.#{json[0].ext}?#{timestamp}"
+        msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{timestamp}"
 
   robot.hear /(.*?) gets/i, (msg) ->
     keyword = msg.match[1]
@@ -29,4 +29,4 @@ module.exports = (robot) ->
       json = JSON.parse body
       if json.length > 0
         json = shuffle json
-        msg.send "http://img.tiqav.com/#{json[0].id}.#{json[0].ext}?#{timestamp}"
+        msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{timestamp}"
