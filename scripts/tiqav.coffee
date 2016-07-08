@@ -35,5 +35,15 @@ module.exports = (robot) ->
     request (err, res, body) ->
       json = JSON.parse body
       if json.length > 0
-        json = shuffle json
-        msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{timestamp}"
+        items = shuffle json
+        msg.send "http://img.tiqav.com/#{items[0].id}.th.#{itmes[0].ext}?#{timestamp}"
+
+  robot.hear /(.*?) goos/i, (msg) ->
+    keyword = translate_ng_words msg.match[1] + ' 漫画'
+    request = msg.http('https://www.googleapis.com/customsearch/v1').query(q: keyword, cx: process.env.GCSE_ID, searchType: 'image', key: process.env.GCS_KEY).get()
+    request (err, res, body) ->
+      json = JSON.parse body
+      if json.items.length > 0
+        items = shuffle json.items
+        msg.send "#{items[0].link}?#{timestamp}"
+
