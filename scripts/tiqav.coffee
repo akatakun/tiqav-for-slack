@@ -35,8 +35,8 @@ module.exports = (robot) ->
     request (err, res, body) ->
       json = JSON.parse body
       if json.length > 0
-        items = shuffle json
-        msg.send "http://img.tiqav.com/#{items[0].id}.th.#{itmes[0].ext}?#{timestamp}"
+        json = shuffle json
+        msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{timestamp}"
 
   robot.hear /(.*?) goos/i, (msg) ->
     keyword = translate_ng_words msg.match[1] + ' 漫画'
