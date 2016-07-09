@@ -1,9 +1,8 @@
-filter_saturation = (array) ->
-  # Filter saturation
-  #execSync = require('child_process').execSync
-  #path = "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}"
-  #output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
-  #msg.send output
+#filter_saturation = (array) ->
+#  execSync = require('child_process').execSync
+#  path = "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}"
+#  output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+#  msg.send output
 
 shuffle = (array) ->
   # For clone
@@ -30,12 +29,12 @@ send_with_tiqav = (msg, path, query = {}) ->
 
 
 send_with_google = (msg, path, query = {}) ->
-  msg.send 'hoge'
   path = "http://livedoor.blogimg.jp/banab/imgs/4/5/45ca1a56.jpg"
   execSync = require('child_process').execSync
   output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
   msg.send 'hoge'
   msg.send output
+  msg.send path
   #msg.http(path).query(query).get() (err, res, body) ->
   #  json = JSON.parse body
   #  if json.items.length > 0
