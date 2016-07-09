@@ -1,3 +1,10 @@
+filter_saturation = (array) ->
+  # Filter saturation
+  #execSync = require('child_process').execSync
+  #path = "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}"
+  #output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+  #msg.send output
+
 shuffle = (array) ->
   # For clone
   arr = array.slice()
@@ -13,6 +20,7 @@ shuffle = (array) ->
 get_timestamp = () ->
   (new Date()).toISOString().replace(/[^0-9]/g, '')
 
+
 send_with_tiqav = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
@@ -20,13 +28,19 @@ send_with_tiqav = (msg, path, query = {}) ->
       items = shuffle json
       msg.send "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}?#{get_timestamp()}"
 
+
 send_with_google = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
-      items = shuffle json.items.slice(0, 5)
-      msg.send "#{items[0].link}?#{get_timestamp()}"
-
+      execSync = require('child_process').execSync
+      items = json.items.slice()
+      for item in items
+        output = '' + execSync "convert #{item.link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+        msg.send "#{item.link}?#{get_timestamp()}"
+        msg.send output
+      #items = shuffle json.items.slice(0, 5)
+      #msg.send "#{items[0].link}?#{get_timestamp()}"
 
 
 module.exports = (robot) ->
