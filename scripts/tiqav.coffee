@@ -30,6 +30,10 @@ send_with_tiqav = (msg, path, query = {}) ->
 
 send_with_google = (msg, path, query = {}) ->
   path = "http://livedoor.blogimg.jp/banab/imgs/4/5/45ca1a56.jpg"
+  exec = require('child_process').exec
+  exec("convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:", (err, stdout, stderr) ->
+    msg.send stdout
+
   #execSync = require('child_process').execSync
   #output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
   #msg.send 'hoge'
