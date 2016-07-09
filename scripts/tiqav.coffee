@@ -30,18 +30,26 @@ send_with_tiqav = (msg, path, query = {}) ->
 
 
 send_with_google = (msg, path, query = {}) ->
-  msg.http(path).query(query).get() (err, res, body) ->
-    json = JSON.parse body
-    if json.items.length > 0
-      execSync = require('child_process').execSync
-      items = json.items.slice()
-      for item in items
-        output = '' + execSync "convert #{item.link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
-        #msg.send "#{item.link}?#{get_timestamp()}"
-        msg.send output
-        msg.send 'hoge'
-      #items = shuffle json.items.slice(0, 5)
-      #msg.send "#{items[0].link}?#{get_timestamp()}"
+  msg.send 'hoge'
+  path = "http://livedoor.blogimg.jp/banab/imgs/4/5/45ca1a56.jpg"
+  execSync = require('child_process').execSync
+  output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+  msg.send 'hoge'
+  msg.send output
+  #msg.http(path).query(query).get() (err, res, body) ->
+  #  json = JSON.parse body
+  #  if json.items.length > 0
+  #    items = json.items.slice(0, 1)
+  #    for item in items
+  #      msg.send 'hoge'
+  #      execSync = require('child_process').execSync
+  #      output = '' + execSync "convert #{item.link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+  #      #msg.send "#{item.link}?#{get_timestamp()}"
+  #      msg.send 'hoge'
+  #      msg.send output
+  #      msg.send 'hoge'
+  #    #items = shuffle json.items.slice(0, 5)
+  #    #msg.send "#{items[0].link}?#{get_timestamp()}"
 
 
 module.exports = (robot) ->
