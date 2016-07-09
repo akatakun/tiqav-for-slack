@@ -32,8 +32,13 @@ send_with_google = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
-      items = shuffle json.items.slice(0, 5)
-      msg.send "#{items[0].link}?#{get_timestamp()}"
+      #items = shuffle json.items.slice(0, 5)
+      for item in json.items
+        msg.send "#{item.link}?#{get_timestamp()}"
+
+      #execSync = require('child_process').execSync
+      #output = '' + execSync "convert #{items[0].link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
+      #msg.send "saturation: #{output}"
 
 module.exports = (robot) ->
   robot.hear /(.*?) tr/i, (msg) ->
@@ -45,4 +50,4 @@ module.exports = (robot) ->
 
   robot.hear /(.*?) gs/i, (msg) ->
     keyword = msg.match[1]
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {q: keyword, cx: process.env.GCSE_ID, searchType: 'image', key: process.env.GCS_KEY}
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: 'gray'}
