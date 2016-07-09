@@ -37,8 +37,9 @@ send_with_google = (msg, path, query = {}) ->
       items = json.items.slice()
       for item in items
         output = '' + execSync "convert #{item.link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
-        msg.send "#{item.link}?#{get_timestamp()}"
+        #msg.send "#{item.link}?#{get_timestamp()}"
         msg.send output
+        msg.send 'hoge'
       #items = shuffle json.items.slice(0, 5)
       #msg.send "#{items[0].link}?#{get_timestamp()}"
 
