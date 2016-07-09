@@ -1,4 +1,6 @@
-shuffle = (arr) ->
+shuffle = (array) ->
+  # For clone
+  arr = array.slice()
   i = arr.length
   while --i
     j = Math.floor(Math.random() * (i + 1))
@@ -15,14 +17,14 @@ send_with_tiqav = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.length > 0
-      json = shuffle json
-      msg.send "http://img.tiqav.com/#{json[0].id}.th.#{json[0].ext}?#{get_timestamp()}"
+      items = shuffle json
+      msg.send "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}?#{get_timestamp()}"
 
 send_with_google = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
-      items = shuffle json.items
+      items = shuffle json.items.slice(0, 5)
       msg.send "#{items[0].link}?#{get_timestamp()}"
 
 
@@ -36,5 +38,5 @@ module.exports = (robot) ->
     send_with_tiqav msg, 'http://api.tiqav.com/search.json', {q: keyword}
 
   robot.hear /(.*?) gs/i, (msg) ->
-    keyword = msg.match[1] + ' 漫画'
+    keyword = msg.match[1]
     send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {q: keyword, cx: process.env.GCSE_ID, searchType: 'image', key: process.env.GCS_KEY}
