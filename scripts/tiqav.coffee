@@ -29,31 +29,11 @@ send_with_tiqav = (msg, path, query = {}) ->
 
 
 send_with_google = (msg, path, query = {}) ->
-  path = "http://livedoor.blogimg.jp/banab/imgs/4/5/45ca1a56.jpg"
-  exec = require('child_process').exec
-  exec("convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:", (err, stdout, stderr) ->
-    msg.send stdout
-
-  #execSync = require('child_process').execSync
-  #output = '' + execSync "convert #{path} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
-  #msg.send 'hoge'
-  #msg.send output
-  msg.send path
-  #msg.http(path).query(query).get() (err, res, body) ->
-  #  json = JSON.parse body
-  #  if json.items.length > 0
-  #    items = json.items.slice(0, 1)
-  #    for item in items
-  #      msg.send 'hoge'
-  #      execSync = require('child_process').execSync
-  #      output = '' + execSync "convert #{item.link} -colorspace HSB -separate -delete 0 -fx \"u*v\" -format '%[fx:mean]' info:"
-  #      #msg.send "#{item.link}?#{get_timestamp()}"
-  #      msg.send 'hoge'
-  #      msg.send output
-  #      msg.send 'hoge'
-  #    #items = shuffle json.items.slice(0, 5)
-  #    #msg.send "#{items[0].link}?#{get_timestamp()}"
-
+  msg.http(path).query(query).get() (err, res, body) ->
+    json = JSON.parse body
+    if json.items.length > 0
+      items = shuffle json.items.slice(0, 5)
+      msg.send "#{items[0].link}?#{get_timestamp()}"
 
 module.exports = (robot) ->
   robot.hear /(.*?) tr/i, (msg) ->
