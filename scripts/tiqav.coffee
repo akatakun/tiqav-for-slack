@@ -40,4 +40,4 @@ module.exports = (robot) ->
 
   robot.hear /(.*?) gs/i, (msg) ->
     keyword = msg.match[1]
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: 'gray', safe: 'high'}
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: 'mono', safe: 'high'}
