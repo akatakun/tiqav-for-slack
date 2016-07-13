@@ -1,16 +1,5 @@
-url = require 'url'
-
-blacklist_host = [
-  'pbs.twimg.com',
-]
-
-filter_host = (array) ->
-  # For clone
-  array.filter (ele) ->
-    u = url.parse ele
-    !blacklist_host.includes(u.host)
-
 shuffle = (array) ->
+  # For clone
   arr = array.slice()
   i = arr.length
   while --i
@@ -37,12 +26,8 @@ send_with_google = (msg, path, query = {}) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
-      links = json.items.map (ele) ->
-        ele.link
-      links = filter_host links
-      links = links.slice 0, 3
-      links = shuffle links
-      msg.send "#{links[0]}?#{get_timestamp()}"
+      items = shuffle json.items.slice(0, 3)
+      msg.send "#{items[0].link}?#{get_timestamp()}"
 
 
 module.exports = (robot) ->
