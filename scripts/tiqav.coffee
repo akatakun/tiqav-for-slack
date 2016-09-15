@@ -38,6 +38,11 @@ module.exports = (robot) ->
     keyword = msg.match[1]
     send_with_tiqav msg, 'http://api.tiqav.com/search.json', {q: keyword}
 
-  robot.hear /(.*?) gs/i, (msg) ->
+  robot.hear /(.*?) gs ?(.*)/i, (msg) ->
     keyword = msg.match[1]
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: 'gray', safe: 'high'}
+    options = msg.match[2]
+    type  = 'gray'
+    if options
+      m = options.match /-t ?(\w+)/
+      type  = 'color' if m and m[1] == 'c'
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}
