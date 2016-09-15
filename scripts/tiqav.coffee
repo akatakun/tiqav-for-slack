@@ -22,12 +22,17 @@ send_with_tiqav = (msg, path, query = {}) ->
       msg.send "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}?#{get_timestamp()}"
 
 
-send_with_google = (msg, path, query = {}) ->
+send_with_google = (msg, path, query = {}, index) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
-      items = shuffle json.items.slice(0, 3)
-      msg.send "#{items[0].link}?#{get_timestamp()}"
+      items = json.items
+      if typeof index == 'undefined'
+        items = shuffle items.slice(0, 3)
+        item  = items[0]
+      else
+        item  = json.items[index]
+      msg.send "#{item.link}?#{get_timestamp()}"
 
 
 module.exports = (robot) ->
@@ -44,5 +49,7 @@ module.exports = (robot) ->
     type  = 'gray'
     if options
       m = options.match /-t ?(\w+)/
-      type  = 'color' if m and m[1] == 'c'
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}
+      type  = 'color'      if m and m[1] == 'c'
+      m = options.match /-i ?(\d+)/
+      index = Number(m[1]) if m and m[1]
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}, index
