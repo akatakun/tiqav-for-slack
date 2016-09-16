@@ -8,5 +8,5 @@ module.exports = (robot) ->
 
   # *(sec) *(min) *(hour) *(day) *(month) *(day of the week)
   new cron_job('0 * * * * *', () ->
-    send '#general', "current date is #{new Date}"
+    send '#general', "current date is"
   ).start()
