@@ -8,6 +8,5 @@ module.exports = (robot) ->
 
   # *(sec) *(min) *(hour) *(day) *(month) *(day of the week)
   new cron_job('0 * * * * *', () ->
-    current_time = new Date
-    send '#general', "current time is #{new Date().current_time.getHours()}:00"
+    send '#general', "current date is #{new Date}"
   ).start()
