@@ -9,6 +9,14 @@ shuffle = (array) ->
     arr[j] = tmp
   arr
 
+filter_with_blacklist = (array) ->
+  blacklist = [
+    'pbs.twimg.com',
+  ]
+  array.filter (a) ->
+    !blacklist.some (b) ->
+      (new RegExp(b)).test a.link
+
 # Avoid to be cached same url image by Slack
 get_timestamp = () ->
   (new Date()).toISOString().replace(/[^0-9]/g, '')
@@ -27,6 +35,7 @@ send_with_google = (msg, path, query = {}, index) ->
     json = JSON.parse body
     if json.items.length > 0
       items = json.items
+      items = filter_with_blacklist items
       if typeof index == 'undefined'
         items = shuffle items.slice(0, 3)
         item  = items[0]
