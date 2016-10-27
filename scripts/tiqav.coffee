@@ -45,6 +45,11 @@ send_with_google = (msg, path, query = {}, index, limit = 3) ->
 
 
 module.exports = (robot) ->
+  # For slack reminder
+  robot.hear /Reminder: (.*)\./i, (msg) ->
+    keyword = '可愛い アニメ'
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: 'color', safe: 'high'}
+
   robot.hear /(.*?) tr/i, (msg) ->
     send_with_tiqav msg, 'http://api.tiqav.com/search/random.json'
 
