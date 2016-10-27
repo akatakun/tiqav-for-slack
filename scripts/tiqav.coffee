@@ -30,18 +30,20 @@ send_with_tiqav = (msg, path, query = {}) ->
       msg.send "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}?#{get_timestamp()}"
 
 
-send_with_google = (msg, path, query = {}, index, limit = 3) ->
+send_with_google = (msg, path, query = {}, index, limit = 1) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
       items = json.items
       items = filter_with_blacklist items
+
       if typeof index == 'undefined'
-        items = shuffle items.slice(0, limit)
-        item  = items[0]
-      else
-        item  = json.items[index]
-      msg.send "#{item.link}?#{get_timestamp()}"
+        items = shuffle items
+        index = 0
+      items = items.slice(index, index + limit)
+
+      for item in items
+        msg.send "#{item.link}?#{get_timestamp()}"
 
 
 module.exports = (robot) ->
