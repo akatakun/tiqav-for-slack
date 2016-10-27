@@ -30,14 +30,14 @@ send_with_tiqav = (msg, path, query = {}) ->
       msg.send "http://img.tiqav.com/#{items[0].id}.th.#{items[0].ext}?#{get_timestamp()}"
 
 
-send_with_google = (msg, path, query = {}, index) ->
+send_with_google = (msg, path, query = {}, index, limit = 3) ->
   msg.http(path).query(query).get() (err, res, body) ->
     json = JSON.parse body
     if json.items.length > 0
       items = json.items
       items = filter_with_blacklist items
       if typeof index == 'undefined'
-        items = shuffle items.slice(0, 3)
+        items = shuffle items.slice(0, limit)
         item  = items[0]
       else
         item  = json.items[index]
@@ -61,4 +61,6 @@ module.exports = (robot) ->
       type  = 'color'      if m and m[1] == 'c'
       m = options.match /-i ?(\d+)/
       index = Number(m[1]) if m and m[1]
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}, index
+      m = options.match /-l ?(\d+)/
+      limit = Number(m[1]) if m and m[1]
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}, index, limit
