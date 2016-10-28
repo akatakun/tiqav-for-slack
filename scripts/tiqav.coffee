@@ -70,4 +70,19 @@ module.exports = (robot) ->
       index = Number(m[1]) if m and m[1]
       m = options.match /-l ?(\d+)/
       limit = Number(m[1]) if m and m[1]
-    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', {key: process.env.GCS_KEY, cx: process.env.GCSE_ID, q: keyword, searchType: 'image', imgColorType: type, safe: 'high'}, index, limit
+
+    query = {
+      key: process.env.GCS_KEY,
+      cx: process.env.GCSE_ID,
+      q: keyword,
+      searchType: 'image',
+      imgColorType: type,
+      safe: 'high',
+    }
+
+    if options
+      if options.match /-a/
+        query.hq = 'animated'
+        query.tbs = 'itp:animated'
+
+    send_with_google msg, 'https://www.googleapis.com/customsearch/v1', query, index, limit
