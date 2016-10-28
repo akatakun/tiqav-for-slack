@@ -82,6 +82,7 @@ module.exports = (robot) ->
 
     if options
       if options.match /-a/
+        query.fileType = 'gif'
         query.hq = 'animated'
         query.tbs = 'itp:animated'
 
